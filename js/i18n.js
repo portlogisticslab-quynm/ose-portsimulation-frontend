@@ -1,0 +1,237 @@
+/* Bilingual dictionary (VI default / EN) */
+const I18N = {
+  vi: {
+    "nav.dashboard": "Tổng quan", "nav.inputs": "Dữ liệu đầu vào", "nav.run": "Chạy mô phỏng", "nav.results": "Kết quả chi tiết",
+    "nav.gantt": "Lịch bến", "nav.animation": "Hoạt hình", "nav.scenarios": "So sánh kịch bản", "nav.help": "Phương pháp & hướng dẫn",
+    "top.result": "Kết quả:", "top.noResult": "— chưa có —",
+    "srv.on": "Máy chủ đang hoạt động", "srv.off": "Mất kết nối máy chủ",
+
+    "common.save": "Lưu", "common.cancel": "Huỷ", "common.delete": "Xoá", "common.add": "Thêm dòng", "common.dup": "Nhân bản",
+    "common.reset": "Đặt lại", "common.run": "Lần chạy", "common.all": "Tất cả", "common.mean": "Trung bình", "common.unit": "Đơn vị",
+    "common.metric": "Chỉ tiêu", "common.value": "Giá trị", "common.status": "Trạng thái", "common.hours": "giờ", "common.ships": "tàu",
+    "common.noData": "Chưa có dữ liệu", "common.needResult": "Chưa có kết quả mô phỏng. Hãy chạy mô phỏng trước.",
+    "common.goRun": "Đến trang chạy mô phỏng", "common.loading": "Đang tải…", "common.showing": "Hiển thị", "common.of": "trên",
+    "common.prev": "‹ Trước", "common.next": "Sau ›", "common.search": "Tìm…", "common.export": "Xuất", "common.close": "Đóng",
+    "common.terminal": "Terminal", "common.shipType": "Loại tàu", "common.month": "Tháng", "common.day": "Ngày", "common.hour": "Giờ",
+    "common.zoomHint": "Kéo chuột trên biểu đồ để phóng to · nhấp đúp để về toàn cảnh",
+
+    "dash.title": "Tổng quan khai thác", "dash.alerts": "Cảnh báo & khuyến nghị", "dash.noAlerts": "Không phát hiện vấn đề đáng kể.",
+    "dash.waitBreak": "Cơ cấu thời gian chờ trung bình / lượt tàu", "dash.occ": "Hệ số chiếm dụng bến so với khuyến nghị UNCTAD",
+    "dash.monthly": "Sản lượng theo tháng", "dash.ta": "Phân bố thời gian quay vòng tàu", "dash.termTable": "Chỉ tiêu theo terminal",
+    "dash.ci": "±{ci} (KTC 95%)", "dash.runsInfo": "{n} lần chạy · kỳ đo {a}–{b} h · tạo lúc {c}",
+    "hero.title": "Mô phỏng quy hoạch & khai thác cảng biển",
+    "hero.lead": "Đánh giá năng lực tiếp nhận tàu, xác định nút thắt và so sánh phương án đầu tư luồng – bến – thiết bị dưới tác động đồng thời của thủy triều, sóng, gió và chính sách khai thác.",
+    "hero.s1": "Nạp dữ liệu Excel (định dạng cũ v1.5.1 hoặc workbook gộp) hoặc dùng dữ liệu demo",
+    "hero.s2": "Kiểm tra đầu vào và ước tính năng lực nhanh (Erlang-C)",
+    "hero.s3": "Chạy nhiều lần mô phỏng độc lập – kết quả có khoảng tin cậy 95%",
+    "hero.s4": "Phân tích KPI, lịch bến, hoạt hình và so sánh kịch bản",
+    "hero.start": "Bắt đầu với dữ liệu demo", "hero.features": "Điểm mới của phiên bản Web 2.0",
+    "hero.f1": "Cửa sổ thủy triều/thời tiết kiểm tra suốt hành trình", "hero.f2": "Dừng làm hàng do thời tiết trong khi làm hàng",
+    "hero.f3": "Luồng một chiều / hai chiều / quy tắc bề rộng, ưu tiên thực sự", "hero.f4": "Cấp phát bến theo số bến, chiều dài cầu, cẩu, độ sâu",
+    "hero.f5": "Squat, dự phòng sóng, hạn chế hành hải ban đêm", "hero.f6": "Chiếm dụng bến vs UNCTAD, W/S, P90/P95, sản lượng tháng",
+
+    "k.throughput": "Sản lượng quy năm", "k.service": "Tỷ lệ phục vụ", "k.ta": "Quay vòng trung bình", "k.ws": "Tỷ số chờ/phục vụ",
+    "k.occ": "Chiếm dụng bến", "k.prewait": "Chờ trước bến TB", "k.queue": "Tàu chờ neo TB", "k.chan": "Sử dụng luồng",
+    "k.calls": "{n} lượt tàu/năm", "k.p90": "P90: {v} h", "k.wsRef": "khuyến nghị ≤ 0,2–0,5", "k.maxQ": "tối đa {v} tàu",
+    "k.berthTime": "tại bến {v} h", "k.unserved": "{v} lượt không phục vụ",
+
+    "alert.WS_HIGH": "Tỷ số chờ/phục vụ W/S = {v} vượt 0,5 – năng lực bến không đủ, tàu chờ lâu hơn một nửa thời gian làm hàng.",
+    "alert.WS_MED": "Tỷ số chờ/phục vụ W/S = {v} (0,2–0,5): chấp nhận được với hàng rời, cao với tàu container.",
+    "alert.UNSERVED": "Chỉ {v}% lượt tàu được phục vụ – xem nguyên nhân tại Kết quả › Chờ đợi.",
+    "alert.OCC_HIGH": "{t}: chiếm dụng bến {v}% vượt ngưỡng UNCTAD {r}% – cân nhắc thêm bến, tăng năng suất hoặc terminal dự phòng.",
+    "alert.OCC_LOW": "{t}: chiếm dụng bến chỉ {v}% (ngưỡng {r}%) – dư năng lực.",
+    "alert.TIDE": "Chờ triều trung bình {v} h/lượt – cân nhắc nạo vét hoặc điều chỉnh mớn nước khai thác.",
+    "alert.DOWNTIME": "Dừng làm hàng do thời tiết trung bình {v} h/lượt – ảnh hưởng đáng kể tới năng lực bến.",
+
+    "wait.WaitBerth_h": "Chờ bến", "wait.WaitTideIn_h": "Chờ triều vào", "wait.WaitWeatherIn_h": "Chờ thời tiết vào",
+    "wait.WaitDaylightIn_h": "Chờ ban ngày vào", "wait.WaitChannelIn_h": "Chờ luồng vào", "wait.HandlingDowntime_h": "Dừng làm hàng (thời tiết)",
+    "wait.WaitTideOut_h": "Chờ triều ra", "wait.WaitWeatherOut_h": "Chờ thời tiết ra", "wait.WaitDaylightOut_h": "Chờ ban ngày ra",
+    "wait.WaitChannelOut_h": "Chờ luồng ra",
+    "cause.berth": "Chờ bến", "cause.tide": "Chờ triều", "cause.weather": "Chờ thời tiết", "cause.day": "Chờ ban ngày",
+    "cause.channel": "Chờ luồng", "cause.down": "Dừng làm hàng",
+
+    "in.title": "Dữ liệu đầu vào", "in.lead": "Chỉnh sửa trực tiếp hoặc nạp từ Excel. Dữ liệu được lưu tạm trong trình duyệt.",
+    "in.tab.params": "Thông số cảng", "in.tab.terms": "Terminal & bến", "in.tab.fleet": "Đội tàu", "in.tab.env": "Môi trường",
+    "in.tab.check": "Kiểm tra & năng lực", "in.tab.io": "Nhập / xuất Excel",
+    "in.loadDemo": "Nạp dữ liệu demo", "in.exportX": "Xuất Excel (workbook gộp)", "in.exportZip": "Xuất 6 file định dạng v1.5.1",
+    "in.drop": "Kéo thả file Excel vào đây hoặc bấm để chọn", "in.dropSub": "Hỗ trợ 6 file cũ (port_params, terminal_data, ship_fleet, water_level, wave_series, wind_series) hoặc workbook gộp. Sheet được nhận dạng theo tên cột.",
+    "in.imported": "Đã nạp", "in.advanced": "Hiện cột nâng cao", "in.required": "Cột bắt buộc", "in.optional": "Cột tùy chọn (để trống = mặc định)",
+    "in.changed": "{n} tham số khác mặc định", "in.resetAll": "Khôi phục mặc định", "in.check": "Kiểm tra đầu vào",
+    "in.capTitle": "Ước tính năng lực nhanh (giải tích M/G/c – Allen–Cunneen)",
+    "in.capNote": "Ước tính sơ bộ chưa xét thủy triều, thời tiết và luồng. Dùng để sàng lọc phương án trước khi mô phỏng.",
+    "in.cap.calls": "Lượt/năm", "in.cap.svc": "Phục vụ TB (h)", "in.cap.rho": "ρ lý thuyết", "in.cap.wq": "Chờ bến ước tính (h)",
+    "in.envStats": "Thống kê môi trường", "in.env.hand": "Thời gian cho phép làm hàng", "in.env.nav": "Thời gian cho phép hành hải (sóng/gió)",
+    "in.env.wl": "Mực nước (m)", "in.env.hs": "Chiều cao sóng Hs (m)", "in.env.wind": "Tốc độ gió (m/s)",
+    "in.env.limitNav": "Giới hạn đi luồng", "in.env.limitHand": "Giới hạn làm hàng", "in.env.depthNeed": "Mực nước cần cho tàu mớn lớn nhất",
+    "in.fleetSum": "Tổng {n} lượt tàu/năm · {c} loại tàu", "in.termSum": "{n} terminal · {b} bến · {l} m cầu cảng · {c} cẩu",
+    "in.checkOk": "Đầu vào hợp lệ – có thể chạy mô phỏng.", "in.checkFail": "Đầu vào có lỗi – cần sửa trước khi chạy.",
+    "in.accessTitle": "Khả năng tiếp cận theo thủy triều",
+
+    "run.title": "Chạy mô phỏng", "run.name": "Tên lần chạy / kịch bản", "run.start": "Chạy mô phỏng", "run.cancel": "Dừng",
+    "run.progress": "Tiến độ", "run.log": "Nhật ký", "run.history": "Các lần chạy", "run.open": "Mở", "run.settings": "Thiết lập chính",
+    "run.started": "Đã bắt đầu chạy mô phỏng", "run.done": "Mô phỏng hoàn tất", "run.failed": "Mô phỏng thất bại",
+    "run.exportX": "Báo cáo Excel", "run.exportJ": "Dữ liệu JSON", "run.saveScen": "Lưu thành kịch bản",
+    "run.col.name": "Tên", "run.col.created": "Thời điểm", "run.col.ta": "Quay vòng (h)", "run.col.occ": "Chiếm dụng bến",
+    "run.col.thr": "Sản lượng (t/năm)",
+
+    "res.title": "Kết quả chi tiết", "res.tab.wait": "Thời gian chờ", "res.tab.term": "Terminal & tài nguyên",
+    "res.tab.types": "Loại tàu", "res.tab.queue": "Diễn biến theo thời gian", "res.tab.arr": "Tàu đến", "res.tab.kpi": "Bảng KPI đầy đủ",
+    "res.tab.ships": "Danh sách tàu",
+    "res.waitIn": "Chờ vào cảng", "res.waitOut": "Chờ rời cảng", "res.waitShare": "Tỷ trọng nguyên nhân chờ",
+    "res.prewaitHist": "Phân bố thời gian chờ trước bến", "res.waitByType": "Thời gian chờ theo loại tàu", "res.reasons": "Tàu không được phục vụ",
+    "res.noUnserved": "Tất cả tàu trong kỳ đo đều được phục vụ.",
+    "res.util": "Hệ số sử dụng tài nguyên theo terminal", "res.capVsSim": "Ước tính giải tích so với mô phỏng",
+    "res.occ": "Chiếm dụng bến", "res.working": "Bến đang làm hàng", "res.quay": "Sử dụng cầu cảng", "res.crane": "Sử dụng cẩu",
+    "res.unctad": "Ngưỡng UNCTAD", "res.analytic": "ρ giải tích", "res.simulated": "Mô phỏng",
+    "res.taByType": "Quay vòng theo loại tàu", "res.access": "Tỷ lệ thời gian đủ nước (vào/ra)", "res.accIn": "Tiếp cận vào", "res.accOut": "Tiếp cận ra",
+    "res.queueTs": "Số tàu chờ tại vùng neo theo nguyên nhân", "res.berthTs": "Hệ số chiếm dụng bến trung bình ngày theo terminal (%)",
+    "res.envTs": "Điều kiện môi trường", "res.selectRun": "Lần chạy", "res.hod": "Tàu đến theo giờ trong ngày",
+    "res.daily": "Số tàu đến theo ngày", "res.monthlyCalls": "Lượt tàu theo tháng", "res.inChannel": "Tàu trên luồng", "res.waitOutQ": "Chờ rời bến",
+    "res.perRun": "Theo từng lần chạy", "res.ci": "±KTC95", "res.sd": "Độ lệch chuẩn",
+    "res.filterAll": "Tất cả", "res.served": "Được phục vụ", "res.rejected": "Không phục vụ",
+
+    "g.title": "Lịch chiếm dụng bến (Berth Gantt)", "g.lead": "Mỗi hàng là một vị trí bến. Cuộn chuột để phóng to, kéo để di chuyển.",
+    "g.week": "1 tuần", "g.month": "1 tháng", "g.all": "Toàn bộ", "g.reserved": "Đã phân bến (tàu chưa cập)", "g.berthing": "Cập / rời bến",
+    "g.handling": "Làm hàng", "g.waitOut": "Chờ rời bến (triều/luồng)", "g.weatherBand": "Thời tiết không cho phép làm hàng",
+    "g.berth": "Bến", "g.colorBy": "Tô màu theo", "g.byType": "Loại tàu", "g.byWait": "Thời gian chờ trước bến",
+
+    "a.title": "Hoạt hình vận hành cảng", "a.play": "Phát", "a.pause": "Tạm dừng", "a.speed": "Tốc độ", "a.busiest": "Tới giai đoạn đông nhất",
+    "a.anchorage": "Vùng neo chờ", "a.channel": "Luồng tàu", "a.basin": "Vũng quay trở", "a.sea": "Ngoài khơi",
+    "a.inChannel": "Trên luồng", "a.atBerth": "Tại bến", "a.waiting": "Đang chờ", "a.env": "Môi trường hiện tại",
+    "a.counts": "Trạng thái hiện tại", "a.handlingStop": "DỪNG LÀM HÀNG", "a.navClosed": "LUỒNG HẠN CHẾ", "a.perSec": "h/giây",
+
+    "sc.title": "So sánh kịch bản", "sc.lead": "Lưu kết quả các phương án (mở rộng bến, nạo vét, chính sách luồng…) và so sánh song song.",
+    "sc.saveCur": "Lưu kết quả hiện tại thành kịch bản", "sc.name": "Tên kịch bản", "sc.note": "Ghi chú", "sc.list": "Kịch bản đã lưu",
+    "sc.compare": "So sánh các kịch bản đã chọn", "sc.base": "Gốc", "sc.load": "Nạp đầu vào", "sc.loaded": "Đã nạp đầu vào của kịch bản vào trình soạn thảo",
+    "sc.none": "Chưa có kịch bản nào được lưu.", "sc.pick": "Chọn ít nhất 1 kịch bản để so sánh.", "sc.delta": "Δ so với gốc",
+    "sc.saved": "Đã lưu kịch bản", "sc.occTerm": "Chiếm dụng bến theo terminal",
+
+    "h.title": "Phương pháp mô hình & hướng dẫn",
+  },
+  en: {
+    "nav.dashboard": "Overview", "nav.inputs": "Input data", "nav.run": "Run simulation", "nav.results": "Detailed results",
+    "nav.gantt": "Berth schedule", "nav.animation": "Animation", "nav.scenarios": "Scenario comparison", "nav.help": "Method & guide",
+    "top.result": "Result:", "top.noResult": "— none —",
+    "srv.on": "Server online", "srv.off": "Server unreachable",
+
+    "common.save": "Save", "common.cancel": "Cancel", "common.delete": "Delete", "common.add": "Add row", "common.dup": "Duplicate",
+    "common.reset": "Reset", "common.run": "Run", "common.all": "All", "common.mean": "Mean", "common.unit": "Unit",
+    "common.metric": "Metric", "common.value": "Value", "common.status": "Status", "common.hours": "hours", "common.ships": "ships",
+    "common.noData": "No data", "common.needResult": "No simulation result yet. Run a simulation first.",
+    "common.goRun": "Go to Run simulation", "common.loading": "Loading…", "common.showing": "Showing", "common.of": "of",
+    "common.prev": "‹ Prev", "common.next": "Next ›", "common.search": "Search…", "common.export": "Export", "common.close": "Close",
+    "common.terminal": "Terminal", "common.shipType": "Ship type", "common.month": "Month", "common.day": "Day", "common.hour": "Hour",
+    "common.zoomHint": "Drag on the chart to zoom · double-click to reset",
+
+    "dash.title": "Operations overview", "dash.alerts": "Alerts & recommendations", "dash.noAlerts": "No significant issues detected.",
+    "dash.waitBreak": "Mean waiting time per call by cause", "dash.occ": "Berth occupancy vs UNCTAD recommendation",
+    "dash.monthly": "Monthly throughput", "dash.ta": "Turnaround time distribution", "dash.termTable": "Terminal indicators",
+    "dash.ci": "±{ci} (95% CI)", "dash.runsInfo": "{n} replications · measured {a}–{b} h · created {c}",
+    "hero.title": "Port planning & operations simulation",
+    "hero.lead": "Assess vessel-handling capacity, find bottlenecks and compare channel, berth and equipment investments under tide, waves, wind and operating policies.",
+    "hero.s1": "Load Excel data (legacy v1.5.1 files or a combined workbook) or use the demo data",
+    "hero.s2": "Validate inputs and get a quick analytical capacity estimate (Erlang-C)",
+    "hero.s3": "Run independent replications – results with 95% confidence intervals",
+    "hero.s4": "Analyse KPIs, berth schedule, animation and compare scenarios",
+    "hero.start": "Start with demo data", "hero.features": "What's new in Web 2.0",
+    "hero.f1": "Tidal/weather windows checked over the whole transit", "hero.f2": "Weather downtime during cargo handling",
+    "hero.f3": "One-way / two-way / beam-rule channel with real priorities", "hero.f4": "Berth allocation by berths, quay length, cranes, depth",
+    "hero.f5": "Squat, wave allowance, night navigation limits", "hero.f6": "Occupancy vs UNCTAD, W/S, P90/P95, monthly throughput",
+
+    "k.throughput": "Annual throughput", "k.service": "Service level", "k.ta": "Mean turnaround", "k.ws": "Waiting/service ratio",
+    "k.occ": "Berth occupancy", "k.prewait": "Mean pre-berth wait", "k.queue": "Mean anchorage queue", "k.chan": "Channel utilisation",
+    "k.calls": "{n} calls/year", "k.p90": "P90: {v} h", "k.wsRef": "recommended ≤ 0.2–0.5", "k.maxQ": "max {v} ships",
+    "k.berthTime": "at berth {v} h", "k.unserved": "{v} unserved calls",
+
+    "alert.WS_HIGH": "Waiting/service ratio W/S = {v} exceeds 0.5 – berth capacity is insufficient.",
+    "alert.WS_MED": "Waiting/service ratio W/S = {v} (0.2–0.5): acceptable for bulk, high for container ships.",
+    "alert.UNSERVED": "Only {v}% of calls served – see Results › Waiting for reasons.",
+    "alert.OCC_HIGH": "{t}: berth occupancy {v}% exceeds UNCTAD {r}% – consider more berths, higher productivity or an alternative terminal.",
+    "alert.OCC_LOW": "{t}: berth occupancy only {v}% (threshold {r}%) – spare capacity.",
+    "alert.TIDE": "Mean tidal waiting {v} h/call – consider dredging or revising operating drafts.",
+    "alert.DOWNTIME": "Mean weather downtime during handling {v} h/call – significant impact on berth capacity.",
+
+    "wait.WaitBerth_h": "Wait for berth", "wait.WaitTideIn_h": "Tide (in)", "wait.WaitWeatherIn_h": "Weather (in)",
+    "wait.WaitDaylightIn_h": "Daylight (in)", "wait.WaitChannelIn_h": "Channel (in)", "wait.HandlingDowntime_h": "Handling downtime (weather)",
+    "wait.WaitTideOut_h": "Tide (out)", "wait.WaitWeatherOut_h": "Weather (out)", "wait.WaitDaylightOut_h": "Daylight (out)",
+    "wait.WaitChannelOut_h": "Channel (out)",
+    "cause.berth": "Berth", "cause.tide": "Tide", "cause.weather": "Weather", "cause.day": "Daylight", "cause.channel": "Channel",
+    "cause.down": "Handling downtime",
+
+    "in.title": "Input data", "in.lead": "Edit directly or import from Excel. Data are kept in this browser.",
+    "in.tab.params": "Port parameters", "in.tab.terms": "Terminals & berths", "in.tab.fleet": "Fleet", "in.tab.env": "Environment",
+    "in.tab.check": "Validation & capacity", "in.tab.io": "Excel import / export",
+    "in.loadDemo": "Load demo data", "in.exportX": "Export Excel (combined)", "in.exportZip": "Export 6 files (v1.5.1 format)",
+    "in.drop": "Drop Excel files here or click to choose", "in.dropSub": "Supports the 6 legacy files or one combined workbook. Sheets are recognised by their column headers.",
+    "in.imported": "Imported", "in.advanced": "Show advanced columns", "in.required": "Required columns", "in.optional": "Optional columns (blank = default)",
+    "in.changed": "{n} parameters differ from default", "in.resetAll": "Restore defaults", "in.check": "Validate inputs",
+    "in.capTitle": "Quick capacity estimate (analytical M/G/c – Allen–Cunneen)",
+    "in.capNote": "Screening estimate ignoring tide, weather and channel. Use it before simulating.",
+    "in.cap.calls": "Calls/yr", "in.cap.svc": "Mean service (h)", "in.cap.rho": "Theoretical ρ", "in.cap.wq": "Est. berth wait (h)",
+    "in.envStats": "Environment statistics", "in.env.hand": "Handling weather uptime", "in.env.nav": "Navigation weather uptime",
+    "in.env.wl": "Water level (m)", "in.env.hs": "Wave height Hs (m)", "in.env.wind": "Wind speed (m/s)",
+    "in.env.limitNav": "Navigation limit", "in.env.limitHand": "Handling limit", "in.env.depthNeed": "Level needed by deepest ship",
+    "in.fleetSum": "{n} calls/year · {c} ship types", "in.termSum": "{n} terminals · {b} berths · {l} m quay · {c} cranes",
+    "in.checkOk": "Inputs valid – ready to simulate.", "in.checkFail": "Inputs contain errors – fix before running.",
+    "in.accessTitle": "Tidal accessibility",
+
+    "run.title": "Run simulation", "run.name": "Run / scenario name", "run.start": "Run simulation", "run.cancel": "Stop",
+    "run.progress": "Progress", "run.log": "Log", "run.history": "Runs", "run.open": "Open", "run.settings": "Key settings",
+    "run.started": "Simulation started", "run.done": "Simulation completed", "run.failed": "Simulation failed",
+    "run.exportX": "Excel report", "run.exportJ": "JSON data", "run.saveScen": "Save as scenario",
+    "run.col.name": "Name", "run.col.created": "Created", "run.col.ta": "Turnaround (h)", "run.col.occ": "Berth occupancy",
+    "run.col.thr": "Throughput (t/yr)",
+
+    "res.title": "Detailed results", "res.tab.wait": "Waiting", "res.tab.term": "Terminals & resources",
+    "res.tab.types": "Ship types", "res.tab.queue": "Time series", "res.tab.arr": "Arrivals", "res.tab.kpi": "Full KPI table",
+    "res.tab.ships": "Ship list",
+    "res.waitIn": "Waiting inbound", "res.waitOut": "Waiting outbound", "res.waitShare": "Share of waiting causes",
+    "res.prewaitHist": "Pre-berth waiting distribution", "res.waitByType": "Waiting by ship type", "res.reasons": "Unserved calls",
+    "res.noUnserved": "All calls in the measured period were served.",
+    "res.util": "Resource utilisation by terminal", "res.capVsSim": "Analytical estimate vs simulation",
+    "res.occ": "Berth occupancy", "res.working": "Berth working", "res.quay": "Quay utilisation", "res.crane": "Crane utilisation",
+    "res.unctad": "UNCTAD threshold", "res.analytic": "Analytical ρ", "res.simulated": "Simulated",
+    "res.taByType": "Turnaround by ship type", "res.access": "Share of time with sufficient depth (in/out)", "res.accIn": "Access in", "res.accOut": "Access out",
+    "res.queueTs": "Ships waiting at anchorage by cause", "res.berthTs": "Daily mean berth occupancy by terminal (%)",
+    "res.envTs": "Environmental conditions", "res.selectRun": "Replication", "res.hod": "Arrivals by hour of day",
+    "res.daily": "Arrivals per day", "res.monthlyCalls": "Calls per month", "res.inChannel": "In channel", "res.waitOutQ": "Waiting to sail",
+    "res.perRun": "Per replication", "res.ci": "±CI95", "res.sd": "Std. dev.",
+    "res.filterAll": "All", "res.served": "Served", "res.rejected": "Unserved",
+
+    "g.title": "Berth occupancy schedule (Gantt)", "g.lead": "Each row is a berth position. Scroll to zoom, drag to pan.",
+    "g.week": "1 week", "g.month": "1 month", "g.all": "All", "g.reserved": "Berth assigned (ship not alongside)", "g.berthing": "Berthing / unberthing",
+    "g.handling": "Cargo handling", "g.waitOut": "Waiting to sail (tide/channel)", "g.weatherBand": "Handling stopped by weather",
+    "g.berth": "Berth", "g.colorBy": "Colour by", "g.byType": "Ship type", "g.byWait": "Pre-berth waiting",
+
+    "a.title": "Port operations animation", "a.play": "Play", "a.pause": "Pause", "a.speed": "Speed", "a.busiest": "Jump to busiest period",
+    "a.anchorage": "Anchorage", "a.channel": "Channel", "a.basin": "Turning basin", "a.sea": "Offshore",
+    "a.inChannel": "In channel", "a.atBerth": "At berth", "a.waiting": "Waiting", "a.env": "Current environment",
+    "a.counts": "Current state", "a.handlingStop": "HANDLING STOPPED", "a.navClosed": "NAVIGATION RESTRICTED", "a.perSec": "h/sec",
+
+    "sc.title": "Scenario comparison", "sc.lead": "Save results of alternatives (berth expansion, dredging, channel policy…) and compare side by side.",
+    "sc.saveCur": "Save current result as scenario", "sc.name": "Scenario name", "sc.note": "Note", "sc.list": "Saved scenarios",
+    "sc.compare": "Compare selected scenarios", "sc.base": "Base", "sc.load": "Load inputs", "sc.loaded": "Scenario inputs loaded into the editor",
+    "sc.none": "No scenarios saved yet.", "sc.pick": "Select at least 1 scenario.", "sc.delta": "Δ vs base",
+    "sc.saved": "Scenario saved", "sc.occTerm": "Berth occupancy by terminal",
+
+    "h.title": "Model method & guide",
+  },
+};
+
+let LANG = (() => { try { return localStorage.getItem("psim.lang") || "vi"; } catch (e) { return "vi"; } })();
+
+function t(key, vars) {
+  let s = (I18N[LANG] && I18N[LANG][key]) || I18N.vi[key] || key;
+  if (vars) for (const k in vars) s = s.split("{" + k + "}").join(vars[k]);
+  return s;
+}
+function L(obj, base) { // pick label_vi / label_en
+  if (!obj) return "";
+  return obj[(base || "label") + "_" + LANG] || obj[(base || "label") + "_vi"] || "";
+}
+function setLang(l) {
+  LANG = l;
+  try { localStorage.setItem("psim.lang", l); } catch (e) { /* ignore */ }
+  document.documentElement.lang = l;
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+}
