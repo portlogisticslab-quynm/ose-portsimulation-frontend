@@ -38,7 +38,7 @@ const Pages = {
     if (!App.result) return Pages.hero(view);
     const R = App.result, K = R.kpis, m = R.meta;
     view.appendChild(pageHead(t("dash.title"), t("dash.runsInfo", { n: m.nRuns, a: fmt(m.measureStart, 0), b: fmt(m.measureEnd, 0), c: m.created }), [
-      h("a", { class: "btn", href: `api/runs/${App.runId}/export.xlsx?lang=${LANG}` }, "⤓ " + t("run.exportX")),
+      h("a", { class: "btn", href: apiUrl(`api/runs/${App.runId}/export.xlsx?lang=${LANG}`) }, "⤓ " + t("run.exportX")),
       h("a", { class: "btn", href: "#/scenarios" }, "⇄ " + t("run.saveScen")),
     ]));
     const ws = kget("ws_ratio").mean, sl = kget("service_level").mean;
@@ -314,7 +314,7 @@ const Pages = {
           {
             key: "act", label: "", fmt: (_, r) => h("span", { class: "row", style: { gap: "4px", flexWrap: "nowrap" } },
               r.status === "done" ? h("button", { class: "btn-sm", onclick: async e => { e.stopPropagation(); await App.openRun(r.id, true); location.hash = "#/dashboard"; } }, t("run.open")) : null,
-              r.status === "done" ? h("a", { class: "btn btn-sm", href: `api/runs/${r.id}/export.xlsx?lang=${LANG}`, onclick: e => e.stopPropagation() }, "⤓ xlsx") : null,
+              r.status === "done" ? h("a", { class: "btn btn-sm", href: apiUrl(`api/runs/${r.id}/export.xlsx?lang=${LANG}`), onclick: e => e.stopPropagation() }, "⤓ xlsx") : null,
               h("button", { class: "btn-sm btn-danger", onclick: async e => { e.stopPropagation(); await API.del(`api/runs/${r.id}`); if (App.runId === r.id) { App.result = null; App.runId = null; } await App.refreshRuns(); renderHist(); } }, "✕")),
           },
         ],
@@ -364,7 +364,7 @@ const Pages = {
     if (!needResult(view)) return;
     sub = sub || "wait";
     const R = App.result, K = R.kpis;
-    view.appendChild(pageHead(t("res.title"), R.name, [h("a", { class: "btn", href: `api/runs/${App.runId}/export.xlsx?lang=${LANG}` }, "⤓ " + t("run.exportX")), h("a", { class: "btn", href: `api/runs/${App.runId}/export.json` }, "⤓ JSON")]));
+    view.appendChild(pageHead(t("res.title"), R.name, [h("a", { class: "btn", href: apiUrl(`api/runs/${App.runId}/export.xlsx?lang=${LANG}`) }, "⤓ " + t("run.exportX")), h("a", { class: "btn", href: apiUrl(`api/runs/${App.runId}/export.json`) }, "⤓ JSON")]));
     view.appendChild(tabs([["wait", t("res.tab.wait")], ["terminals", t("res.tab.term")], ["types", t("res.tab.types")], ["timeseries", t("res.tab.queue")], ["arrivals", t("res.tab.arr")], ["kpi", t("res.tab.kpi")], ["ships", t("res.tab.ships")]],
       sub, id => location.hash = "#/results/" + id));
     const body = h("div", { class: "stack" }); view.appendChild(body);

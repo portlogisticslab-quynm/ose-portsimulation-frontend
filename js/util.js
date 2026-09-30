@@ -70,18 +70,52 @@ async function downloadPost(url, body, filename) {
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 
+const API_BASE = "https://ose-portsimulation-backend.onrender.com";
+
+function apiUrl(url) {
+  if (/^https?:\/\//i.test(url)) return url;
+  return API_BASE + "/" + url.replace(/^\/+/, "");
+}
+
 const API = {
-  async get(url) { const r = await fetch(url); const j = await r.json(); if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j }); return j; },
-  async post(url, body) {
-    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    const j = await r.json(); if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j }); return j;
+  async get(url) {
+    const r = await fetch(apiUrl(url));
+    const j = await r.json();
+    if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j });
+    return j;
   },
-  async del(url) { const r = await fetch(url, { method: "DELETE" }); return r.json(); },
+
+  async post(url, body) {
+    const r = await fetch(apiUrl(url), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    const j = await r.json();
+    if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j });
+    return j;
+  },
+
+  async del(url) {
+    const r = await fetch(apiUrl(url), { method: "DELETE" });
+    const j = await r.json();
+    if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j });
+    return j;
+  },
+
   async upload(url, files, base) {
-    const fd = new FormData(); for (const f of files) fd.append("files", f);
+    const fd = new FormData();
+    for (const f of files) fd.append("files", f);
     if (base) fd.append("base", JSON.stringify(base));
-    const r = await fetch(url, { method: "POST", body: fd }); const j = await r.json();
-    if (!r.ok) throw new Error(j.error || r.statusText); return j;
+
+    const r = await fetch(apiUrl(url), {
+      method: "POST",
+      body: fd
+    });
+
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || r.statusText);
+    return j;
   },
 };
 
