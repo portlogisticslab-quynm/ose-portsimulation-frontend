@@ -5,6 +5,12 @@ const I18N = {
     "nav.gantt": "Lịch bến", "nav.animation": "Hoạt hình", "nav.scenarios": "So sánh kịch bản", "nav.help": "Phương pháp & hướng dẫn",
     "top.result": "Kết quả:", "top.noResult": "— chưa có —",
     "srv.on": "Máy chủ đang hoạt động", "srv.off": "Mất kết nối máy chủ",
+    "srv.title": "Chọn máy chủ tính toán (thêm ?api= vào địa chỉ trang)", "srv.auto": "Tự động (Home → Render)", "srv.home": "Home server", "srv.render": "Render",
+    "srv.nHome": "Home server", "srv.nRender": "Render", "srv.nLocal": "Cục bộ", "srv.checking": "đang kiểm tra…", "srv.connecting": "Đang kết nối máy chủ…", "srv.offline": "mất kết nối",
+    "srv.waking": "Đang kết nối máy chủ tính toán… Render (gói miễn phí) có thể mất 30–60 giây để khởi động.",
+    "srv.offHelp": "Không kết nối được máy chủ. Thử chọn máy chủ khác ở góc trên (Home server / Render), hoặc chạy cục bộ: python backend/app.py",
+    "srv.lost": "Không tìm thấy lần chạy này trên máy chủ hiện tại (máy chủ vừa chuyển giữa Home và Render, hoặc đã khởi động lại). Hãy chạy lại.",
+    "srv.onRender": "Đang tính trên Render (lần đầu có thể mất 30–60 giây)…",
 
     "common.save": "Lưu", "common.cancel": "Huỷ", "common.delete": "Xoá", "common.add": "Thêm dòng", "common.dup": "Nhân bản",
     "common.reset": "Đặt lại", "common.run": "Lần chạy", "common.all": "Tất cả", "common.mean": "Trung bình", "common.unit": "Đơn vị",
@@ -113,6 +119,12 @@ const I18N = {
     "nav.gantt": "Berth schedule", "nav.animation": "Animation", "nav.scenarios": "Scenario comparison", "nav.help": "Method & guide",
     "top.result": "Result:", "top.noResult": "— none —",
     "srv.on": "Server online", "srv.off": "Server unreachable",
+    "srv.title": "Choose the computing server (adds ?api= to the URL)", "srv.auto": "Auto (Home → Render)", "srv.home": "Home server", "srv.render": "Render",
+    "srv.nHome": "Home server", "srv.nRender": "Render", "srv.nLocal": "Local", "srv.checking": "checking…", "srv.connecting": "Connecting to the server…", "srv.offline": "offline",
+    "srv.waking": "Connecting to the computing server… Render (free plan) may need 30–60 s to wake up.",
+    "srv.offHelp": "Cannot reach the server. Try another server in the top bar (Home server / Render), or run locally: python backend/app.py",
+    "srv.lost": "This run was not found on the current server (it switched between Home and Render, or restarted). Please run it again.",
+    "srv.onRender": "Computing on Render (first call may take 30–60 s)…",
 
     "common.save": "Save", "common.cancel": "Cancel", "common.delete": "Delete", "common.add": "Add row", "common.dup": "Duplicate",
     "common.reset": "Reset", "common.run": "Run", "common.all": "All", "common.mean": "Mean", "common.unit": "Unit",
@@ -234,4 +246,5 @@ function setLang(l) {
   try { localStorage.setItem("psim.lang", l); } catch (e) { /* ignore */ }
   document.documentElement.lang = l;
   document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-title]").forEach(el => { el.title = t(el.dataset.i18nTitle); });
 }

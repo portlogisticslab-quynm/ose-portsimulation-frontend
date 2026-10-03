@@ -164,9 +164,9 @@ const Gantt = (() => {
           ["ETA", fmtDate(s.ETA_h)], [t("g.reserved"), fmtDate(s.BerthAssigned_h)],
           [t("g.handling"), `${fmtDate(s.StartService_h)} → ${fmtDate(s.EndService_h)}`],
           [LANG === "vi" ? "Hàng / năng suất" : "Cargo / rate", `${fmtBig(s.Cargo_t)} t · ${fmt(s.Rate_tph, 0)} t/h · ${s.CranesAssigned} ${LANG === "vi" ? "cẩu" : "cranes"}`],
-          [t("k.prewait"), fmt(pre, 1) + " h"], [t("wait.HandlingDowntime_h"), fmt(s.HandlingDowntime_h, 1) + " h"],
+          [LANG === "vi" ? "Chờ trước bến" : "Pre-berth wait", fmt(pre, 1) + " h"], [t("wait.HandlingDowntime_h"), fmt(s.HandlingDowntime_h, 1) + " h"],
           [LANG === "vi" ? "Chờ rời bến" : "Wait to sail", fmt((s.WaitTideOut_h || 0) + (s.WaitWeatherOut_h || 0) + (s.WaitChannelOut_h || 0) + (s.WaitDaylightOut_h || 0), 1) + " h"],
-          [t("k.ta"), s.Turnaround_h != null ? fmt(s.Turnaround_h, 1) + " h" : "–"],
+          [LANG === "vi" ? "Quay vòng" : "Turnaround", s.Turnaround_h != null ? fmt(s.Turnaround_h, 1) + " h" : "–"],
         ];
         TT.show(`<div class="tt-title">#${s.CallID} · ${esc(cfg.terminals[termIndex[s.TerminalID]].TerminalName)} ${t("g.berth")} ${s.BerthSlot}</div>` +
           rows.map(r => `<div class="tt-row"><span>${esc(r[0])}</span><b>${esc(r[1])}</b></div>`).join(""), e.clientX, e.clientY);

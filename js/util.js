@@ -40,13 +40,14 @@ function fmtBig(v) {
 /* Hour index (Hour 1 = 1 Jan 00:00) -> date label */
 const MDAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 function hourToDate(hh) {
-  let x = hh - 1; if (!isFinite(x)) return null;
-  const yearH = 8760; let year = 0;
-  while (x >= yearH) { x -= yearH; year++; }
-  while (x < 0) { x += yearH; year--; }
-  let day = Math.floor(x / 24); const hr = x - day * 24; let m = 0;
+  if (!isFinite(hh)) return null;
+  let mins = Math.round((hh - 1) * 60);  // whole minutes since 1 Jan 00:00
+  const yearM = 8760 * 60; let year = 0;
+  while (mins >= yearM) { mins -= yearM; year++; }
+  while (mins < 0) { mins += yearM; year--; }
+  let day = Math.floor(mins / 1440); const rem = mins - day * 1440; let m = 0;
   while (m < 11 && day >= MDAYS[m]) { day -= MDAYS[m]; m++; }
-  return { year, month: m, day: day + 1, hour: Math.floor(hr), minute: Math.floor((hr % 1) * 60) };
+  return { year, month: m, day: day + 1, hour: Math.floor(rem / 60), minute: rem % 60 };
 }
 const pad = n => String(n).padStart(2, "0");
 function fmtDate(hh, withTime = true) {
@@ -62,60 +63,68 @@ function toast(msg, isErr) {
   clearTimeout(toast._t); toast._t = setTimeout(() => el.className = "toast", isErr ? 5000 : 2600);
 }
 function download(url) { const a = h("a", { href: url, download: "" }); document.body.appendChild(a); a.click(); a.remove(); }
+
+/* ---- Backend access (js/config.js picks Home server / Render / same origin) ----
+   Run ids carry the server that owns them: "h-…" home, "r-…" Render, "l-…" local.
+   Follow-up calls for a run (status, result, detail, export, scenario save) go to that same server,
+   so a result produced on Render stays readable after the Worker switches back to home. */
+function apiPath(url) { return "/" + String(url).replace(/^\/+/, ""); }
+function runIdOf(path) { const m = /\/api\/runs\/([^/?#]+)/.exec(path); return m ? decodeURIComponent(m[1]) : ""; }
+function ownerBase(id) {
+  const B = window.OSE_BACKENDS;
+  if (!B || window.OSE_SAME_ORIGIN || !id) return null;
+  if (id.startsWith("r-")) return B.render;
+  // Home runs: talk to the tunnel host directly (<api>-home.ose.vn). Going through the Worker would send a slow
+  // export (> 5 s) to Render, which does not know this run, and push every user to Render for 30 s.
+  if (id.startsWith("h-")) return B.home.replace(/^(https?:\/\/)([^./]+)\./, "$1$2-home.");
+  return null;
+}
+async function apiFetch(url, opts = {}, runId) {
+  const path = apiPath(url);
+  const owner = ownerBase(runId || runIdOf(path));
+  if (owner) return fetch(owner + path, opts);
+  if (window.oseFetch) return window.oseFetch(path, opts);
+  return fetch(path, opts);
+}
+function apiUrl(url, runId) {
+  const path = apiPath(url);
+  return (ownerBase(runId || runIdOf(path)) || window.OSE_API_BASE || "") + path;
+}
+async function readJson(r) {
+  const text = await r.text();
+  try { return JSON.parse(text); }
+  catch (e) { throw Object.assign(new Error(`${t("srv.off")} (HTTP ${r.status})`), { status: r.status }); }
+}
+async function apiJson(url, opts, runId) {
+  const r = await apiFetch(url, opts, runId);
+  const j = await readJson(r);
+  if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j, status: r.status });
+  return j;
+}
+function backendName(base) {
+  base = String(base || window.OSE_API_BASE || "");
+  if (base.includes("onrender.com")) return t("srv.nRender");
+  if (/127\.0\.0\.1|localhost/.test(base)) return t("srv.nLocal");
+  return t("srv.nHome");
+}
 async function downloadPost(url, body, filename) {
-  const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-  if (!r.ok) throw new Error((await r.json()).error || r.statusText);
+  const r = await apiFetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (!r.ok) throw new Error((await readJson(r)).error || r.statusText);
   const blob = await r.blob();
   const a = h("a", { href: URL.createObjectURL(blob), download: filename });
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 
-const API_BASE = "https://ose-portsimulation-backend.onrender.com";
-
-function apiUrl(url) {
-  if (/^https?:\/\//i.test(url)) return url;
-  return API_BASE + "/" + url.replace(/^\/+/, "");
-}
-
 const API = {
-  async get(url) {
-    const r = await fetch(apiUrl(url));
-    const j = await r.json();
-    if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j });
-    return j;
+  get(url) { return apiJson(url, { cache: "no-store" }); },
+  post(url, body) {
+    return apiJson(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }, body && body.runId);
   },
-
-  async post(url, body) {
-    const r = await fetch(apiUrl(url), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    const j = await r.json();
-    if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j });
-    return j;
-  },
-
-  async del(url) {
-    const r = await fetch(apiUrl(url), { method: "DELETE" });
-    const j = await r.json();
-    if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j });
-    return j;
-  },
-
+  async del(url) { const r = await apiFetch(url, { method: "DELETE" }); return readJson(r); },
   async upload(url, files, base) {
-    const fd = new FormData();
-    for (const f of files) fd.append("files", f);
+    const fd = new FormData(); for (const f of files) fd.append("files", f);
     if (base) fd.append("base", JSON.stringify(base));
-
-    const r = await fetch(apiUrl(url), {
-      method: "POST",
-      body: fd
-    });
-
-    const j = await r.json();
-    if (!r.ok) throw new Error(j.error || r.statusText);
-    return j;
+    return apiJson(url, { method: "POST", body: fd });
   },
 };
 

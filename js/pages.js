@@ -38,7 +38,7 @@ const Pages = {
     if (!App.result) return Pages.hero(view);
     const R = App.result, K = R.kpis, m = R.meta;
     view.appendChild(pageHead(t("dash.title"), t("dash.runsInfo", { n: m.nRuns, a: fmt(m.measureStart, 0), b: fmt(m.measureEnd, 0), c: m.created }), [
-      h("a", { class: "btn", href: apiUrl(`api/runs/${App.runId}/export.xlsx?lang=${LANG}`) }, "⤓ " + t("run.exportX")),
+      h("a", { class: "btn", href: `api/runs/${App.runId}/export.xlsx?lang=${LANG}` }, "⤓ " + t("run.exportX")),
       h("a", { class: "btn", href: "#/scenarios" }, "⇄ " + t("run.saveScen")),
     ]));
     const ws = kget("ws_ratio").mean, sl = kget("service_level").mean;
@@ -321,12 +321,15 @@ const Pages = {
       });
     };
     renderHist();
-    let poll = null, jobId = null;
+    let poll = null, jobId = null, misses = 0;
+    const stopWatch = () => { clearInterval(poll); poll = null; startBtn.disabled = false; cancelBtn.disabled = true; };
     const watch = id => {
-      jobId = id; startBtn.disabled = true; cancelBtn.disabled = false;
+      jobId = id; startBtn.disabled = true; cancelBtn.disabled = false; misses = 0;
+      // same-origin (local) polls fast; through Cloudflare/Render poll once a second to save requests
       poll = setInterval(async () => {
         try {
           const s = await API.get(`api/runs/${id}/status`);
+          misses = 0;
           bar.firstChild.style.width = (100 * s.progress).toFixed(1) + "%";
           stat.textContent = `${s.status} · ${fmt(100 * s.progress, 0)}%`;
           logEl.textContent = s.log.join("\n"); logEl.scrollTop = logEl.scrollHeight;
@@ -338,19 +341,27 @@ const Pages = {
               stat.innerHTML = ""; stat.append(h("a", { href: "#/dashboard" }, "→ " + t("nav.dashboard")));
             } else toast(t("run.failed") + ": " + (s.error || ""), true);
           }
-        } catch (e) { /* transient */ }
-      }, 400);
+        } catch (e) {
+          // 404 = the server that answered does not know this run (Home ↔ Render switch or restart)
+          if (e.status === 404 && ++misses >= 3) {
+            stopWatch(); logEl.textContent += "\n" + t("srv.lost"); toast(t("srv.lost"), true);
+            await App.refreshRuns(); renderHist();
+          }
+        }
+      }, window.OSE_SAME_ORIGIN ? 400 : 1000);
     };
     startBtn.onclick = async () => {
       store.set("lastName", nameIn.value);
       try {
-        logEl.textContent = "";
+        logEl.textContent = String(window.OSE_API_BASE || "").includes("onrender.com") ? t("srv.onRender") : "";
+        startBtn.disabled = true;
         const j = await API.post("api/runs", { inputs: I, name: nameIn.value });
         toast(t("run.started")); watch(j.id);
       } catch (e) {
         const rows = e.data?.check?.rows?.filter(r => r.status === "FAIL") || [];
         logEl.textContent = "ERROR: " + e.message + "\n" + rows.map(r => `  ${r.component}: ${LANG === "vi" ? r.message_vi : r.message_en}`).join("\n");
         toast(e.message, true);
+        startBtn.disabled = false;
       }
     };
     cancelBtn.onclick = () => jobId && API.post(`api/runs/${jobId}/cancel`, {});
@@ -364,7 +375,7 @@ const Pages = {
     if (!needResult(view)) return;
     sub = sub || "wait";
     const R = App.result, K = R.kpis;
-    view.appendChild(pageHead(t("res.title"), R.name, [h("a", { class: "btn", href: apiUrl(`api/runs/${App.runId}/export.xlsx?lang=${LANG}`) }, "⤓ " + t("run.exportX")), h("a", { class: "btn", href: apiUrl(`api/runs/${App.runId}/export.json`) }, "⤓ JSON")]));
+    view.appendChild(pageHead(t("res.title"), R.name, [h("a", { class: "btn", href: `api/runs/${App.runId}/export.xlsx?lang=${LANG}` }, "⤓ " + t("run.exportX")), h("a", { class: "btn", href: `api/runs/${App.runId}/export.json` }, "⤓ JSON")]));
     view.appendChild(tabs([["wait", t("res.tab.wait")], ["terminals", t("res.tab.term")], ["types", t("res.tab.types")], ["timeseries", t("res.tab.queue")], ["arrivals", t("res.tab.arr")], ["kpi", t("res.tab.kpi")], ["ships", t("res.tab.ships")]],
       sub, id => location.hash = "#/results/" + id));
     const body = h("div", { class: "stack" }); view.appendChild(body);
@@ -535,7 +546,7 @@ const Pages = {
         terminals: R.terminals, ships: d.ships, env: R.env, t0: d.t0, tStart: R.meta.measureStart, tEnd: R.meta.measureEnd,
         limits: { hs: R.params["rules.maxWaveForHandling_m"], wind: R.params["rules.maxWindForHandling_ms"] }, typeColors: App.typeColors,
       });
-      G.setColorBy(colorSel.value); typeLeg();
+      G.setColorBy(colorSel.value); typeLeg(); window.PSIM_GANTT = G;
     };
     sel.onchange = draw; colorSel.onchange = () => { G && G.setColorBy(colorSel.value); typeLeg(); };
     await draw();

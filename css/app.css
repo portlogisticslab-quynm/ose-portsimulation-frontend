@@ -109,6 +109,9 @@ h3 { font-size: 14px; color: var(--ink); }
 .top-actions { display: flex; gap: 10px; align-items: center; }
 .run-picker { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); }
 .run-picker select { max-width: 260px; }
+.api-picker .api-ico { font-size: 13px; color: var(--ink-3); }
+.api-picker select { max-width: 190px; }
+[hidden] { display: none !important; }
 .view { padding: 20px 22px 40px; max-width: 1560px; width: 100%; }
 
 /* ---------- controls ---------- */
@@ -341,7 +344,13 @@ table.grid-edit td.act button:hover { color: var(--crit); }
   .view { padding: 14px 16px 30px; }
   .topbar { padding: 0 12px; }
   .run-picker span { display: none; }
-  .run-picker select { max-width: 130px; }
+  .top-actions { gap: 6px; }
+  .crumb { display: none; }
+  .top-actions { margin-left: auto; }
+  .run-picker select { max-width: 96px; }
+  .api-picker select { max-width: 84px; }
+  .api-picker .api-ico { display: none; }
+  .seg button { padding-left: 7px; padding-right: 7px; }
   .kpis { grid-template-columns: 1fr 1fr; gap: 10px; }
   .kpi-value { font-size: 21px; }
   .pfield { grid-template-columns: 1fr 120px 40px; }
